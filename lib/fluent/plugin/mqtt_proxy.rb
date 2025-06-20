@@ -73,9 +73,15 @@ module Fluent::Plugin
       opts[:password] = @security.password if @security.to_h.has_key?(:password)
       if @security.to_h.has_key?(:use_tls) && @security.use_tls
         opts[:ssl] = @security.use_tls
-        opts[:ca_file] = @security.tls.ca_file
-        opts[:cert_file] = @security.tls.cert_file
-        opts[:key_file] = @security.tls.key_file
+        if @security.tls && @security.tls.ca_file && !@security.tls.ca_file.empty?
+          opts[:ca_file] = @security.tls.ca_file
+        end
+        if @security.tls && @security.tls.cert_file && !@security.tls.cert_file.empty?
+          opts[:cert_file] = @security.tls.cert_file
+        end
+        if @security.tls && @security.tls.key_file && !@security.tls.key_file.empty?
+          opts[:key_file] = @security.tls.key_file
+        end
       end
 
       init_retry_interval
